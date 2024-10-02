@@ -6,6 +6,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
+
 @RegisterRestClient
 @Path("/api/v1/author")
 public interface AuthorClientService {
