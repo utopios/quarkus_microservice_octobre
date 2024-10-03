@@ -3,9 +3,11 @@ package com.example.adapter.rest.resource;
 import com.example.adapter.dto.CommandeDTO;
 import com.example.adapter.factory.CommandeServiceFactory;
 import com.example.adapter.helper.CommandeMapper;
+import com.example.domain.dto.CommandeDetailsDTO;
 import com.example.domain.entity.Commande;
 import com.example.domain.service.CommandeService;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -21,6 +23,7 @@ public class CommandeResource {
     CommandeServiceFactory commandeServiceFactory;
 
     @POST
+    @Transactional
     public Response creerCommande(CommandeDTO commandeDTO) {
         CommandeService commandeService = commandeServiceFactory.create();
         Commande nouvelleCommande = commandeService.creerCommande(CommandeMapper.toDomain(commandeDTO));
@@ -57,5 +60,12 @@ public class CommandeResource {
         CommandeService commandeService = commandeServiceFactory.create();
         commandeService.annulerCommande(id);
         return Response.ok().build();
+    }
+
+    @GET
+    @Path("/{commandeId}/details")
+    public CommandeDetailsDTO recupererDetailsCommande(@PathParam("commandeId") Long commandeId) {
+        CommandeService commandeService = commandeServiceFactory.create();
+        return commandeService.recupererDetailsCommande(commandeId);
     }
 }

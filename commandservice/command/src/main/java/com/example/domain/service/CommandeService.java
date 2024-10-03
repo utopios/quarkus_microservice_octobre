@@ -1,7 +1,10 @@
 package com.example.domain.service;
 
+import com.example.domain.dto.ClientDTO;
+import com.example.domain.dto.CommandeDetailsDTO;
 import com.example.domain.entity.Commande;
 import com.example.domain.entity.StatutCommande;
+import com.example.domain.port.ClientServicePort;
 import com.example.domain.port.CommandeRepositoryPort;
 
 import java.time.LocalDateTime;
@@ -10,10 +13,12 @@ import java.util.List;
 public class CommandeService {
 
     private final CommandeRepositoryPort commandeRepository;
+    private final ClientServicePort clientServicePort;
 
     // Le port est injecté via le constructeur (pas d'@Inject ici)
-    public CommandeService(CommandeRepositoryPort commandeRepository) {
+    public CommandeService(CommandeRepositoryPort commandeRepository, ClientServicePort clientServicePort) {
         this.commandeRepository = commandeRepository;
+        this.clientServicePort = clientServicePort;
     }
 
     public Commande creerCommande(Commande commande) {
@@ -42,5 +47,19 @@ public class CommandeService {
 
     public void supprimerCommande(Long id) {
         commandeRepository.supprimerCommande(id);
+    }
+
+    public CommandeDetailsDTO recupererDetailsCommande(Long commandeId) {
+        Commande commande = commandeRepository.recupererCommandeParId(commandeId);
+        ClientDTO clientDTO = clientServicePort.recupererClient(commande.getClientId());
+
+        CommandeDetailsDTO commandeDetailsDTO = new CommandeDetailsDTO();
+        commandeDetailsDTO.setCommandeId(commande.getId());
+        commandeDetailsDTO.setClient(clientDTO);
+        commandeDetailsDTO.setStatut(commande.getStatut());
+        commandeDetailsDTO.setDateCreation(commande.getDateCreation());
+        commandeDetailsDTO.setDateMiseAJour(commande.getDateMiseAJour());
+
+        return commandeDetailsDTO;
     }
 }

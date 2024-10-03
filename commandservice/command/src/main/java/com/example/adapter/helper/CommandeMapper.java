@@ -6,6 +6,7 @@ import com.example.domain.entity.Article;
 import com.example.domain.entity.Commande;
 import com.example.domain.entity.StatutCommande;
 
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 public class CommandeMapper {
@@ -27,9 +28,8 @@ public class CommandeMapper {
         Commande commande = new Commande();
         commande.setId(dto.id);
         commande.setClientId(dto.clientId);
-        commande.setStatut(StatutCommande.valueOf(dto.statut));
-        commande.setDateCreation(dto.dateCreation);
-        commande.setDateMiseAJour(dto.dateMiseAJour);
+        commande.setDateCreation(LocalDateTime.now());
+        commande.setDateMiseAJour(LocalDateTime.now());
         commande.setArticles(dto.articles.stream()
                 .map(CommandeMapper::toDomain)
                 .collect(Collectors.toList()));
