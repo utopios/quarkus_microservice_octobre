@@ -1,16 +1,15 @@
 package com.example;
 
 
-import com.example.grpc.Book;
-import com.example.BookStreamRequest;
 import com.example.service.LogicBookService;
 import io.grpc.stub.StreamObserver;
+import io.quarkus.grpc.GrpcService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@ApplicationScoped
+@GrpcService
 public class GrpcBookService extends BookServiceGrpc.BookServiceImplBase {
 
     @Inject
@@ -25,24 +24,28 @@ public class GrpcBookService extends BookServiceGrpc.BookServiceImplBase {
         },error -> responseObserver.onError(error));
     }
 
+
+
     @Override
     public void streamBooks(BookStreamRequest request, StreamObserver<Book> responseObserver) {
-        //AtomicBoolean cancelFlag = new AtomicBoolean(false);
+        AtomicBoolean cancelFlag = new AtomicBoolean(false);
 
         logicBookService.streamBooks()
                 .subscribe().with(
                         gBook -> {
                             //if (!cancelFlag.get()) {
-                                Book grpcBook = Book.newBuilder()
-                                        .setId(gBook.id)
-                                        .setTitle(gBook.title)
-                                        .setAuthor(gBook.author)
-                                        .build();
-                                responseObserver.onNext(grpcBook);
+                            com.example.Book grpcBook = com.example.Book.newBuilder()
+                                    .setId(gBook.id)
+                                    .setTitle(gBook.title)
+                                    .setAuthor(gBook.author)
+                                    .build();
+                            responseObserver.onNext(grpcBook);
                             //}
                         },
                         throwable -> {
+                            cancelFlag.set(true);
                             responseObserver.onError(throwable);
+
                         },
                         responseObserver::onCompleted
                 );
