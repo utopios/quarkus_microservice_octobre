@@ -8,6 +8,8 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 
 
 @Path("books")
@@ -22,7 +24,9 @@ public class BookResource {
     }
 
     @GET
+    @Produces(MediaType.SERVER_SENT_EVENTS)
     public Multi<Book> getAllBooks() {
-        return bookService.findAllBooks();
+        //return bookService.findAllBooks();
+        return bookService.streamBooks();
     }
 }

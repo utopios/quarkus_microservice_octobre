@@ -18,37 +18,34 @@ import java.util.List;
 @ApplicationScoped
 public class BookService {
 
-    @Inject
-    Mutiny.SessionFactory sessionFactory;  // Injection de la session Hibernate réactive
 
     @Inject
     PgPool client;
 
-    public Multi<Book> findAllBooks() {
-       return client.query("SELECT id, title, author FROM book")
-               .execute().onItem()
-               .transformToMulti(rows ->  rows.toMulti().onItem()
-                       .transform(row -> new Book(row.getLong("id"), row.getString("title"), row.getString("author"))));
+
+    public Multi<Book> streamBooks() {
+        return streamPage(0);
     }
 
+    private static final int PAGE_SIZE = 10;
 
-    private Multi<Book> getBooks(RowSet<Row> rows) {
-        List<Book> books = new ArrayList<>();
-        for(Row row: rows) {
-            books.add(new Book(row.getLong("id"), row.getString("title"), row.getString("author")));
-        }
-        return Multi.createFrom().iterable(books);
+    private Multi<Book> streamPage(int offset) {
+        return client.preparedQuery("SELECT id, title, author FROM book LIMIT $1 OFFSET $2")
+                .execute(Tuple.of(PAGE_SIZE, offset))
+                .onItem().transformToMulti(rows -> {
+                    Multi<Book> currentPage = rows.toMulti()
+                            .onItem().transform(row -> new Book(
+                                    row.getLong("id"),
+                                    row.getString("title"),
+                                    row.getString("author")
+                            ));
+                    if (rows.rowCount() < PAGE_SIZE) {
+                        return currentPage;
+                    } else {
+                        return Multi.createBy().concatenating().streams(currentPage, streamPage(offset + PAGE_SIZE));
+                    }
+                });
     }
-
-    /*public Multi<Book> streamAllBook() {
-        return Multi.createFrom().deferred(() -> {
-            return sessionFactory.openSession().onItem()
-                    .transformToMulti(session -> session.createQuery("from Book ", Book.class).getResultList()
-                            .onItem().transformToMulti(books -> Multi.createFrom().items(books))
-                    );
-
-        })
-    }*/
 
     public Uni<Void> addBook(String title, String author, Long id) {
         // Insertion d'un nouveau livre dans la base de données
