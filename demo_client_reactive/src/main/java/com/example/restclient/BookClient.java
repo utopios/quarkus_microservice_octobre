@@ -10,11 +10,10 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 
 
-@Path("/books")
 @RegisterRestClient
+@Path("/books")
 public interface BookClient {
     @GET
-    @Path("/stream")
     @Produces(MediaType.SERVER_SENT_EVENTS)
     Multi<Book> streamBooks();
 }

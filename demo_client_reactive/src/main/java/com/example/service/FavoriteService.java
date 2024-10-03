@@ -6,9 +6,12 @@ import com.example.restclient.BookClient;
 import io.smallrye.mutiny.Multi;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 @ApplicationScoped
 public class FavoriteService {
+
+    @RestClient
     @Inject
     BookClient bookClient;
 
