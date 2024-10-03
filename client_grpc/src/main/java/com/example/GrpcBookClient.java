@@ -13,7 +13,7 @@ public class GrpcBookClient {
     @GrpcClient("book-service")
     BookServiceGrpc.BookServiceBlockingStub bookServiceBlockingStub;
 
-    @GrpcClient("book-service")
+    //@GrpcClient("book-service")
     BookServiceGrpc.BookServiceStub bookServiceStub;
 
     public BookServiceGrpc.BookServiceBlockingStub getBlockingStub() {

@@ -21,7 +21,8 @@ public class BookClientService {
                 .build();
 
         return Uni.createFrom().emitter(emitter -> {
-            grpcBookClient.getStub().addBook(request, new StreamObserver<Empty>() {
+            grpcBookClient.getBlockingStub().addBook(request);
+            /*grpcBookClient.getStub().addBook(request, new StreamObserver<Empty>() {
                 @Override
                 public void onNext(Empty empty) {
                     emitter.complete(null);
@@ -36,7 +37,7 @@ public class BookClientService {
                 public void onCompleted() {
 
                 }
-            });
+            });*/
         });
     }
 
@@ -46,7 +47,8 @@ public class BookClientService {
                 .build();
 
         return Uni.createFrom().emitter(emitter -> {
-            grpcBookClient.getStub().streamBooks(request, new StreamObserver<Book>() {
+            grpcBookClient.getBlockingStub().streamBooks(request);
+            /*grpcBookClient.getStub().streamBooks(request, new StreamObserver<Book>() {
                 @Override
                 public void onNext(Book book) {
                     System.out.println("Received book: " + book.getTitle());
@@ -61,7 +63,7 @@ public class BookClientService {
                 public void onCompleted() {
                     emitter.complete(null);
                 }
-            });
+            });*/
         });
     }
 }
