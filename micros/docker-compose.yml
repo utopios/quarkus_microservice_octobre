@@ -1,0 +1,31 @@
+version: '3.8'  # Utilisation d'une version plus récente du format Compose pour tirer parti des nouvelles fonctionnalités
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.0.1  # Image Docker pour Zookeeper version 7.0.1, utilisée pour la coordination entre les nœuds Kafka
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181  # Port sur lequel Zookeeper écoute les connexions des clients
+      ZOOKEEPER_TICK_TIME: 2000  # Intervalle de temps utilisé par Zookeeper pour ses propres opérations internes, exprimé en millisecondes
+    ports:
+      - "2181:2181"  # Mappage du port 2181 de l'hôte au port 2181 du conteneur pour permettre l'accès à Zookeeper
+
+  kafka:
+    image: confluentinc/cp-kafka:7.0.1  # Image Docker pour Kafka version 7.0.1, utilisée pour le courtage de messages
+    ports:
+      - "9092:9092"  # Mappage du port 9092 de l'hôte au port 9092 du conteneur pour permettre l'accès à Kafka
+    environment:
+      KAFKA_BROKER_ID: 1  # Identifiant unique pour ce broker Kafka, utilisé pour différencier plusieurs brokers dans un cluster
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181  # Adresse de connexion à Zookeeper, utilisée par Kafka pour la coordination
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092  # Adresse sur laquelle Kafka annonce ses services aux clients, ici en mode PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1  # Facteur de réplication pour le topic des offsets, important pour la tolérance aux pannes
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1  # Facteur de réplication pour les journaux d'état des transactions, utilisé pour les transactions Kafka
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1  # Nombre minimal de réplicas dans le groupe ISR (In-Sync Replica) pour le journal d'état des transactions
+    depends_on:
+      - zookeeper  # Spécifie que le service Kafka doit démarrer après que le service Zookeeper soit en cours d'exécution
+
+
+# Commande à effectuer pour créer un topic :
+
+# - docker exec -it micros-kafka-1 bash
+# - /bin/kafka-topics --create --topic stock-increase --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+# - kafka-topics.sh --bootstrap-server localhost:9092 --list
