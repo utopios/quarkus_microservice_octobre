@@ -4,6 +4,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 
 import jakarta.ws.rs.core.MediaType;
+import org.example.dto.ProductWithReviews;
 
 
 import java.util.List;
@@ -26,6 +27,12 @@ public class ProductResource {
     @Path("/{id}")
     public Product getProductById(@PathParam("id") Long id) {
         return productService.getProductById(id);
+    }
+
+    @GET
+    @Path("/{id}/reviews")
+    public ProductWithReviews getProductAndReviewsById(@PathParam("id") Long id) {
+        return productService.getProductWithReviews(id);
     }
 
     @POST
