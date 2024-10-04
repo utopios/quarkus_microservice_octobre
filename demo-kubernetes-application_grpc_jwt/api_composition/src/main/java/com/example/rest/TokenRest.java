@@ -17,12 +17,14 @@ public class TokenRest {
     @ConfigProperty(name = "com.ard333.quarkusjwt.jwt.duration") public Long duration;
     @ConfigProperty(name = "mp.jwt.verify.issuer") public String issuer;
 
+
+    //Pour l'exemple en GET
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @PermitAll
     public Response token () {
         //Authentification
-        
+
         Set<Role> roles = Collections.singleton(Role.ADMIN);
 
             try {

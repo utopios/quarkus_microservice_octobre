@@ -16,8 +16,20 @@ public class CustomJWTAtuhFilter implements ContainerRequestFilter {
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
         //Récupération du token
 
-        //String token = containerRequestContext.getHeaderString("Authorization").split(" ")[1];
+        String token = containerRequestContext.getHeaderString("Authorization").split(" ")[1];
+
 
         //Vérification du token en utilisant la clé public
+    }
+
+    private boolean verificationToken(String token) {
+        String[] partieToken = token.split(".");
+        String newSignature = calculeSignature(partieToken[0], partieToken[1]);
+        return (newSignature.equals(partieToken[2]));
+    }
+
+    private String calculeSignature(String partie1, String partie2) {
+        /// Calcule de signature avec la clé privée
+        return "signature";
     }
 }

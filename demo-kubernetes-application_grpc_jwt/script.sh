@@ -1,5 +1,5 @@
 ### Création du cluster avec le mappage des ports avec le host vers le conteneur master du cluster.
-# kind create cluster --name demo-microservice --config ./deploy/kind/config-kind.yml
+kind create cluster --name demo-microservice --config ./deploy/kind/config-kind.yml
 
 #build des images 
 docker build -t quote-service ./quote-service/. -f ./quote-service/Dockerfile.native

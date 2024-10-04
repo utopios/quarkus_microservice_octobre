@@ -36,6 +36,16 @@
             <artifactId>quarkus-jdbc-h2</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-kubernetes</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.strimzi</groupId>
+            <artifactId>strimzi-test-container</artifactId>
+            <version>0.100.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.28</version>
@@ -69,6 +79,17 @@
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.strimzi</groupId>
+            <artifactId>strimzi-test-container</artifactId>
+            <version>0.107.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
