@@ -14,7 +14,7 @@ public class ProductResourceE2ETest {
 
     @Test
     public void testAddProductEndpoint() {
-        Product productToAdd = new Product(null, "Product 1", "Description", 100.0, true, 10);
+        Product productToAdd = new Product(null, "Product 1", "Description", 100.0, true, 10,5,0L);
 
         // Envoyer le produit et vérifier que la réponse renvoie bien un produit sérialisé
         RestAssured.given()

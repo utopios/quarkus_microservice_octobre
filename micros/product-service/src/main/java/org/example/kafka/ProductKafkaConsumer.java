@@ -28,6 +28,25 @@ public class ProductKafkaConsumer {
         }
     }
 
+    @Incoming("review-events-out")
+    @Blocking
+    @Transactional
+    public void updateProductRating(String message) {
+        Long productId = parseProductIdFromMessage(message);
+        double newRating = parseRatingFromMessage(message);
+        Product product = productRepository.findById(productId);
+        if (product != null) {
+
+            double currentRating = product.getAverageReview();
+            long totalReviews = product.getTotalReview();
+            double updatedRating = ((currentRating * totalReviews) + newRating) / (totalReviews + 1);
+            product.setAverageReview(updatedRating);
+            product.setTotalReview(totalReviews + 1);
+
+            productRepository.persist(product);
+        }
+    }
+
     private Long parseProductIdFromMessage(String message) {
         // Extract the productId from the message
         // Example: "Product 1001 stock increased to 50"
@@ -42,4 +61,13 @@ public class ProductKafkaConsumer {
     }
 
 
+
+
+
+
+    private double parseRatingFromMessage(String message) {
+        // Extraire la nouvelle note du message
+        String[] parts = message.split(" ");
+        return Double.parseDouble(parts[5]);
+    }
 }

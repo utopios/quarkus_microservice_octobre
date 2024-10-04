@@ -29,7 +29,7 @@ class ProductKafkaConsumerTest {
     void testUpdateProductStock() {
         String message = "Product 1001 stock increased to 50";
 
-        Product product = new Product(1001L, "Test Product", "Description", 100.0, true, 10);
+        Product product = new Product(1001L, "Test Product", "Description", 100.0, true, 10,5, 0L);
         when(productRepository.findById(1001L)).thenReturn(product);
 
         productKafkaConsumer.updateProductStock(message);

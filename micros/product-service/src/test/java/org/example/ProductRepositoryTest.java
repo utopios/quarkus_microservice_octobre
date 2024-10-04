@@ -19,7 +19,7 @@ public class ProductRepositoryTest {
     @Test
     @Transactional
     public void testAddProduct() {
-        Product product = new Product(null, "Test Product", "Description", 100.0, true, 10);
+        Product product = new Product(null, "Test Product", "Description", 100.0, true, 10,5,0L);
         productRepository.persist(product);
         assertNotNull(product.getId()); // L'ID doit être généré après persistance
     }

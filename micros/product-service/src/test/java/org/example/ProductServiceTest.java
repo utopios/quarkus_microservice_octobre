@@ -25,7 +25,7 @@ class ProductServiceTest {
 
     @Test
     void testAddProduct() {
-        Product product = new Product(1L, "Product 1", "Description", 100.0, true, 100);
+        Product product = new Product(1L, "Product 1", "Description", 100.0, true, 100,5,0L);
 
         // Simuler la méthode persist
         doNothing().when(productRepository).persist(any(Product.class));
