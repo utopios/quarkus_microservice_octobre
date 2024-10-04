@@ -21,6 +21,8 @@ public class TokenRest {
     @Produces(MediaType.APPLICATION_JSON)
     @PermitAll
     public Response token () {
+        //Authentification
+        
         Set<Role> roles = Collections.singleton(Role.ADMIN);
 
             try {

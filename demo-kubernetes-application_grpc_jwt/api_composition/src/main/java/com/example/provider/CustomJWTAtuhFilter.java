@@ -16,7 +16,7 @@ public class CustomJWTAtuhFilter implements ContainerRequestFilter {
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
         //Récupération du token
 
-        String token = containerRequestContext.getHeaderString("Authorization").split(" ")[1];
+        //String token = containerRequestContext.getHeaderString("Authorization").split(" ")[1];
 
         //Vérification du token en utilisant la clé public
     }

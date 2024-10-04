@@ -27,10 +27,11 @@ public class TokenUtils {
         claimsBuilder.issuedAt(currentTimeInSecs);
         claimsBuilder.expiresAt(currentTimeInSecs + duration);
         claimsBuilder.groups(groups);
-
+        claimsBuilder.claim("company", "");
         return claimsBuilder.jws().signatureKeyId(privateKeyLocation).sign(privateKey);
     }
 
+    //Dans le vault
     public static PrivateKey readPrivateKey(final String pemResName) throws Exception {
         try (InputStream contentIS = TokenUtils.class.getResourceAsStream(pemResName)) {
             byte[] tmp = new byte[4096];
