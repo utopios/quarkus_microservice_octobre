@@ -4,6 +4,7 @@ package org.example;
 
 import io.quarkus.test.junit.QuarkusTest;
 
+
 import io.strimzi.test.container.KafkaContainer;
 import jakarta.inject.Inject;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -32,7 +33,32 @@ public class ProductKafkaIntegrationTest {
 
     @BeforeAll
     public static void setupKafka() {
-        kafkaContainer = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.0.1"));
+        kafkaContainer = new KafkaContainer() {
+            @Override
+            public void start() {
+
+            }
+
+            @Override
+            public void stop() {
+
+            }
+
+            @Override
+            public boolean hasKraftOrExternalZooKeeperConfigured() {
+                return false;
+            }
+
+            @Override
+            public String getInternalZooKeeperConnect() {
+                return null;
+            }
+
+            @Override
+            public String getBootstrapServers() {
+                return null;
+            }
+        };
         kafkaContainer.start();
     }
 
